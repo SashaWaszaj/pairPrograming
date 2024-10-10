@@ -10,6 +10,7 @@ public class Main {
         Animal dog = new dog("Firulais", "Tom");
 
         cat.makeSound();
+        dog.makeSound();
 
         InterfaceAnimal.prueba();
     }
