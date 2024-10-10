@@ -1,6 +1,6 @@
 package InterfaceAnimal;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Dog implements Animal {
     private String species = "Perro";
@@ -8,7 +8,7 @@ public class Dog implements Animal {
     private String name;
     private int birthYear;
 
-    public Dog(String breed, String name, int birthYear ) {
+    public Dog(String breed, String name, int birthYear) {
         this.breed = breed;
         this.name = name;
         this.birthYear = birthYear;
@@ -36,11 +36,11 @@ public class Dog implements Animal {
 
     @Override
     public String toString() {
-        return "Animal: "+ species+ ", breed: " + breed + ", name: " + name+ ", edad: " + this.getAge();
+        return "Animal: " + species + ", breed: " + breed + ", name: " + name + ", edad: " + this.getAge();
     }
 
     @Override
     public int getAge() {
-        return new Date().getYear() + 1900 - birthYear;
+        return LocalDate.now().getYear() - birthYear;
     }
 }

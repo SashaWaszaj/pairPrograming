@@ -1,6 +1,6 @@
 package InterfaceAnimal;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Horse implements Animal {
     private String species = "Caballo";
@@ -41,6 +41,6 @@ public class Horse implements Animal {
 
     @Override
     public int getAge() {
-        return new Date().getYear() + 1900 - birthYear;
+        return LocalDate.now().getYear() - birthYear; // Updated to use LocalDate
     }
 }
