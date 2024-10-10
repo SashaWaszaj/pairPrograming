@@ -31,8 +31,13 @@ public class InterfaceAnimal {
         System.out.println(dog.toString());
         mamiferos.addAnimal(dog);
 
+        Animal alligator = new Alligator("americano", "Snappy", 2010);
+        System.out.println(alligator.toString());
+        reptiles.addAnimal(alligator);
+
         System.out.println(felinos.toString());
         System.out.println(mamiferos.toString());
+        System.out.println(reptiles.toString());
 
         int numeroAnimales = 1;
         System.out.println("Areas con mayor a " + numeroAnimales + " de numero de animales");
