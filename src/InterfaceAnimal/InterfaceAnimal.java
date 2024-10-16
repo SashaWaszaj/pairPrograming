@@ -6,11 +6,14 @@ public class InterfaceAnimal {
         ZooArea felinos = new ZooArea("felinos", 2);
         ZooArea reptiles = new ZooArea("reptiles", 3);
         ZooArea mamiferos = new ZooArea("mamiferos", 4);
+
+        //New area for birds
         ZooArea aves = new ZooArea("aves", 2);
 
         botanico.addArea(felinos);
         botanico.addArea(reptiles);
         botanico.addArea(mamiferos);
+        botanico.addArea(aves);
 
         Animal cat = new Cat("carey", "Micha", 2022);
         System.out.println(cat.toString());
