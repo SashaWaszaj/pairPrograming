@@ -19,7 +19,7 @@ public class InterfaceAnimal {
         System.out.println(cat.toString());
         felinos.addAnimal(cat);
 
-        Animal ostrich = new ostrich ("african", "speedy");
+        Animal ostrich = new ostrich ("african", "speedy", "2019");
         system.out.println(ostrich.tostring());
         aves.addAnimal(ostrich);
 
