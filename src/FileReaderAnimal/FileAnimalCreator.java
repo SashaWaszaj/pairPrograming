@@ -1,80 +1,63 @@
 package FileReaderAnimal;
 
+import InterfaceAnimal.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
-import InterfaceAnimal.*;
 
 public class FileAnimalCreator {
-    public static List<Animal> createAnimalsFromFile(String filename, List<ZooArea> areas) throws IOException {
-        List<Animal> animals = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            br.readLine(); // Skip the first line
 
+    public ArrayList<Zoo> parseAnimalEtAl(String filePath) throws IOException {
+        ArrayList<Zoo> zoos = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
+            Zoo currentZoo = null;
+            ZooArea currentArea = null;
+
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 5) {
-                    String type = parts[0].trim();
-                    String breed = parts[1].trim();
-                    String name = parts[2].trim();
-                    int birthYear = Integer.parseInt(parts[3].trim());
-                    String areaAnimal = parts[4].trim();
 
-                    Animal animal = switch (type.toLowerCase()) {
-                        case "cat" -> new Cat(breed, name, birthYear);
-                        case "dog" -> new Dog(breed, name, birthYear);
-                        case "horse" -> new Horse(breed, name, birthYear);
-                        case "alligator" -> new Alligator(breed, name, birthYear);
-                        default -> throw new IllegalArgumentException("Unknown animal type: " + type);
-                    };
-                    for (ZooArea areaZoo : areas) {
-                        if (areaAnimal.equals(areaZoo.getName())) {
-                            areaZoo.addAnimal(animal);
-                            break;
-                        }
+                switch (parts[0].trim().toLowerCase()) {
+                    case "zoo" -> {
+                        // Create a zoo
+                        currentZoo = new Zoo(parts[1]);
+                        zoos.add(currentZoo);
                     }
-                    animals.add(animal);
-                }
-            }
-        }
-        return animals;
-    }
+                    case "area" -> {
+                        // Create the area
+                        currentArea = new ZooArea(parts[1], Integer.parseInt(parts[2]));
+                        if (currentZoo == null) {
+                            throw new IllegalArgumentException("Zoo is null on line: " + line);
+                        }
+                        currentZoo.addArea(currentArea);
+                    }
+                    case "animal" -> {
+                        String type = parts[1].trim();
+                        String breed = parts[2].trim();
+                        String name = parts[3].trim();
+                        int birthYear = Integer.parseInt(parts[4].trim());
 
-    public static List<ZooArea> createZooAreasFromFile(String filename, Zoo zoo) throws IOException {
-        List<ZooArea> areas = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            br.readLine(); // Skip the first line
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 2) {
-                    String name = parts[0].trim();
-                    int maxCapacity = Integer.parseInt(parts[1].trim());
-                    ZooArea area = new ZooArea(name, maxCapacity);
-                    zoo.addArea(area);
-                    areas.add(area);
+                        Animal animal = switch (type.toLowerCase()) {
+                            case "cat" -> new Cat(breed, name, birthYear);
+                            case "dog" -> new Dog(breed, name, birthYear);
+                            case "horse" -> new Horse(breed, name, birthYear);
+                            case "alligator" -> new Alligator(breed, name, birthYear);
+                            default -> throw new IllegalArgumentException("Unknown animal type: " + type);
+                        };
+
+                        if (currentArea == null) {
+                            throw new IllegalArgumentException("Area is null on line: " + line);
+                        }
+
+                        currentArea.addAnimal(animal);
+                    }
+                    default -> throw new IllegalArgumentException("Unknown entry type: " + parts[0]);
                 }
             }
         } catch (IOException e) {
             System.out.println("Error reading file: " + e.getMessage());
         }
-        return areas;
-    }
-
-    public static Zoo createZooFromFile(String filename) throws IOException {
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            br.readLine(); // Skip the first line
-            String line = br.readLine();
-            if (line != null) {
-                return new Zoo(line.trim());
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading file: " + e.getMessage());
-        }
-        throw new IOException("Zoo file is empty");
+        return zoos;
     }
 }

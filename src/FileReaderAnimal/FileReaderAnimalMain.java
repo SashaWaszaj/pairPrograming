@@ -1,32 +1,36 @@
 package FileReaderAnimal;
 
-import java.io.IOException;
-import java.util.List;
-
-import InterfaceAnimal.Animal;
 import InterfaceAnimal.Zoo;
 import InterfaceAnimal.ZooArea;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class FileReaderAnimalMain {
     public static void prueba() {
         try {
-            Zoo zoo = FileAnimalCreator.createZooFromFile("src/FileReaderAnimal/zoo.csv");
-            List<ZooArea> areas = FileAnimalCreator.createZooAreasFromFile("src/FileReaderAnimal/areas.csv", zoo);
-            List<Animal> animals = FileAnimalCreator.createAnimalsFromFile("src/FileReaderAnimal/animals.csv", areas);
+            System.out.println("-----------------------------------");
+            System.out.println("Comienzo de FileAnimalCreator");
+            FileAnimalCreator fileAnimalCreator = new FileAnimalCreator();
+            ArrayList<Zoo> zoos = fileAnimalCreator.parseAnimalEtAl("src/FileReaderAnimal/animalEtAl.csv");
 
-            // for (ZooArea area : zoo.getAreas()) {
-            // System.out.println(area.toString());
-            // }
-
-            for (Animal animal : animals) {
-                System.out.println(animal.toString());
+            for (Zoo zoo : zoos) {
+                System.out.println("----------------inputs-------------------");
+                System.out.println("Zoo: " + zoo.getName());
+                for (ZooArea area : zoo.getAreas()) {
+                    System.out.println(area.toString());
+                }
             }
 
-            int umbralAnimales = 1;
+            int umbralAnimales = 2;
+            System.out.println("-----------------stream------------------");
             System.out.println("Areas con mayor a " + umbralAnimales + " de numero de animales");
-            zoo.getAreas().stream().filter(area -> area.getNumberOfAnimals() > umbralAnimales).forEach(area -> {
-                System.out.println(area.toString());
-            });
+            for (Zoo zoo : zoos) {
+                System.out.println("Zoo: " + zoo.getName());
+                zoo.getAreas().stream().filter(area -> area.getNumberOfAnimals() > umbralAnimales).forEach(area -> {
+                    System.out.println(area.toString());
+                });
+            }
+
         } catch (IOException e) {
             System.out.println("Error reading files: " + e.getMessage());
         }
